@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма</title>
+</head>
+<body>
+    <form id="myForm">
+        <label for="name">Ім'я:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="phone">Телефон:</label><br>
+        <input type="text" id="phone" name="phone"><br>
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email"><br>
+        <label for="comment">Коментар:</label><br>
+        <textarea id="comment" name="comment"></textarea><br><br>
+        <input type="button" value="Відправити" onclick="sendData()">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function sendData() {
+            var formData = {
+                token: "ваш_токен",
+                cmd: "newLead",
+                data: {
+                    name: $('#name').val(),
+                    phone: $('#phone').val(),
+                    email: $('#email').val(),
+                    comment: $('#comment').val(),
+                    source: window.location.href
+                }
+            };
+
+            $.ajax({
+                url: 'https://cbox.mobi/api/v2/leads',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    console.log(response);
+                    if (response.ok) {
+                        alert('Дані успішно відправлені в CRM');
+                    } else {
+                        alert('Під час відправлення даних сталася помилка');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Під час відправлення даних сталася помилка');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
